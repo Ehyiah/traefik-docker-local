@@ -4,7 +4,7 @@ http:
       rule: Host(`traefik.docker.localhost`)
       service: api@internal
 
-tls:
-  certificates:
-    - certFile: "/etc/certs/certs.pem"
-      keyFile: "/etc/certs/certs-key.pem"
+#tls:
+#  certificates:
+#    - certFile: "/etc/certs/certs.pem"
+#      keyFile: "/etc/certs/certs-key.pem"

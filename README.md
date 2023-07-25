@@ -5,7 +5,7 @@ config for using traefik in local env and automatic discovery
 - for https generate keys with mkcert
 - first generate keys with
   mkcert *.localhost *.docker.localhost 127.0.0.1 ::1
-- install key in store with mkcert -install
+- install key in store with : mkcert -install
 
 ## help
 - if on WSL do install the same key on both instances.

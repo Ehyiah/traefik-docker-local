@@ -5,14 +5,14 @@ entryPoints:
   web:
     address: :80
 
-  websecure:
-    address: :443
-    http:
-      tls:
-        domains:
-          - main: "docker.localhost"
-            sans:
-              - "*.docker.localhost"
+#  websecure:
+#    address: :443
+#    http:
+#      tls:
+#        domains:
+#          - main: "docker.localhost"
+#            sans:
+#              - "*.docker.localhost"
 
 providers:
   docker:

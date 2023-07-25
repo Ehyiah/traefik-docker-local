@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   traefik:
-    image: traefik:2.9
+    image: traefik:2.10
     restart: always
     ports:
       - "80:80"
@@ -11,9 +11,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
-      - ./certs:/etc/certs
+#      - ./certs:/etc/certs
     networks:
-      - default
       - traefik
 
 networks:
