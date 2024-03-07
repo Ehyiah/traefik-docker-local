@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   traefik:
-    image: traefik:2.10
+    image: traefik:2.11
     restart: always
     ports:
       - "80:80"
@@ -21,5 +21,5 @@ networks:
 
     # labels:
     #     - traefik.enable=true
-    #     - traefik.http.routers.NOM-DU-SERVICE.rule=Host(`URL-DU-SERVICE.docker.localhost`)
-    #     - traefik.http.services.NOM-DU-SERVICE.loadbalancer.server.port=PORT INTERNE DU SERVICE
+    #     - traefik.http.routers.SERVICE-NAME.rule=Host(`SERVICE-URL.docker.localhost`)
+    #     - traefik.http.services.SERVICE-NAME.loadbalancer.server.port=INTERNAL_PORT_OF_SERVICE
