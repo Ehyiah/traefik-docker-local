@@ -1,28 +1,19 @@
 global:
-  sendAnonymousUsage: false
+    sendAnonymousUsage: false
 
 entryPoints:
-  web:
-    address: :80
-
-#  websecure:
-#    address: :443
-#    http:
-#      tls:
-#        domains:
-#          - main: "docker.localhost"
-#            sans:
-#              - "*.docker.localhost"
+    web:
+        address: :80
 
 providers:
-  docker:
-    exposedByDefault: false
-    defaultRule: "Host(`{{ normalize .Name }}.docker.localhost`)"
-    network: traefik
-  file:
-    filename: "/etc/traefik/traefik_dynamic.yml"
+    docker:
+        exposedByDefault: false
+        defaultRule: "Host(`{{ normalize .Name }}.docker.localhost`)"
+        network: traefik
+    file:
+        filename: "/etc/traefik/traefik_dynamic.yml"
 
 api: {}
 
 log:
- level: DEBUG
+    level: DEBUG

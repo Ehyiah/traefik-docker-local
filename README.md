@@ -1,21 +1,33 @@
 # traefik-docker-local
-config for using traefik in local env and automatic discovery
+Use traefik in local and automatic discovery for docker projects.
 
-# https
-- for https generate keys with mkcert
-- first generate keys with
-  mkcert *.localhost *.docker.localhost 127.0.0.1 ::1
-- install key in store with : mkcert -install
+# Usage
+## Create a network
+create a network that will be used by docker projects.
+example : ``docker network create traefik``
 
-## help
-- if on WSL do install the same key on both instances.
-- on windows the keys will be located here : C:\Users\<username>\AppData\Local\mkcert
-you can create a directory on wsl side like this : /home/<username>/.local/share/mkcert
-- install mkcert on windows with 
-  https://chocolatey.org/install#individual
-  choco install mkcert
-- install mkcert on ubuntu with 
-  wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64
-  mv mkcert-v1.4.4-linux-amd64 mkcert
-  chmod +x mkcert
-  cp mkcert /usr/local/bin/
+## Modify your docker compose file
+in your docker compose file :
+add these labels to exposed service (like caddy, apache, mailer ...)
+and the network : 
+
+Replace {SERVICE-NAME} and {INTERNAL_PORT_OF_SERVICE} with the correct values.
+
+``` yaml
+services:
+    webserver:
+        image: my-server-image  
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.{SERVICE-NAME}.rule=Host(`{SERVICE-URL}.docker.localhost`)
+            - traefik.http.services.{SERVICE-NAME}.loadbalancer.server.port={INTERNAL_PORT_OF_SERVICE}
+        networks:
+            - traefik
+```
+
+then and add the network you created in the docker compose file :
+``` yaml
+networks:
+  traefik:
+    external: true
+```
