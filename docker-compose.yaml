@@ -1,25 +1,17 @@
-version: "3.9"
-
 services:
-  traefik:
-    image: traefik:2.11
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
-#      - ./certs:/etc/certs
-    networks:
-      - traefik
+    traefik:
+        image: traefik:3.2
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./traefik.yml:/etc/traefik/traefik.yml:ro
+            - ./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro
+        networks:
+            - traefik
 
 networks:
-  traefik:
-    external: true
-
-    # labels:
-    #     - traefik.enable=true
-    #     - traefik.http.routers.SERVICE-NAME.rule=Host(`SERVICE-URL.docker.localhost`)
-    #     - traefik.http.services.SERVICE-NAME.loadbalancer.server.port=INTERNAL_PORT_OF_SERVICE
+    traefik:
+        external: true
