@@ -1,8 +1,8 @@
 # traefik-docker-local
 Use traefik in local and automatic discovery for docker projects.
 
-# Usage
-## Create a network
+# Classic Usage
+## 1 - Create a network
 First of all create a network that will be used by docker projects.
 
 just type for example : 
@@ -10,7 +10,7 @@ just type for example :
 docker network create traefik
 ```
 
-## Start traefik
+## 2 - Start traefik
 just type 
 ``` sh
 docker compose up -d
@@ -18,7 +18,7 @@ docker compose up -d
 
 then traefik web interface should be available at ``traefik.docker.localhost``
 
-## Modify your docker compose file
+## 3 - Modify your docker compose file
 in your docker compose file :
 add these labels to exposed service (like caddy, apache, mailer ...)
 and the network : 
@@ -52,12 +52,33 @@ services:
 then and add the network you created in the docker compose file :
 ``` yaml
 networks:
-  traefik:
-    external: true
+    traefik:
+        external: true
 ```
 
-## Update vhost in your projects
+## 4 - Update vhost in your projects
 Don't forget to update the vhost of your projects to use the {SERVICE-URL} you mentioned in your compose files.
 
-## Access your project
+## 5 - Access your project
 Your project will be accessible via the {SERVICE-URL}.
+
+
+# Serve other web server (e.g caddy, apache, nginx)
+If you need to install another web server like caddy for example, just make it work on another port (for example 81 instead of 80 and 441 instead of 443)
+then in your traefik-dynamic.yml update :
+``` yaml
+http:
+    routers:
+        test-router:
+            rule: Host(`other-service.localhost`)  # Définir la règle de routage pour l'adresse other-service.localhost
+            service: caddy-service  # Rediriger vers le service Caddy
+            entryPoints:
+                - web  # Traefik utilise l'entrée "web" qui écoute sur le port 80 (configuré dans traefik.yml)
+
+    services:
+        caddy-service:
+            loadBalancer:
+                servers:
+                    -   url: "http://localhost:81"  # Caddy écoute sur localhost:81
+```
+and you need to update /etc/hosts as you would usualy do without traefik.
