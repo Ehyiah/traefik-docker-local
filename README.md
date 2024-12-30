@@ -23,7 +23,7 @@ in your docker compose file :
 add these labels to exposed service (like caddy, apache, mailer ...)
 and the network : 
 
-Replace {SERVICE-NAME} and {INTERNAL_PORT_OF_SERVICE} with the correct values.
+Replace {SERVICE-NAME} {SERVICE-URL} and {INTERNAL_PORT_OF_SERVICE} with the correct values.
 
 ``` yaml
 services:
@@ -58,3 +58,6 @@ networks:
 
 ## Update vhost in your projects
 Don't forget to update the vhost of your projects to use the {SERVICE-URL} you mentioned in your compose files.
+
+## Access your project
+Your project will be accessible via the {SERVICE-URL}.
