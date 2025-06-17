@@ -3,7 +3,7 @@ Use traefik in local and automatic discovery for docker projects.
 
 # Classic Usage
 ## 1 - Create a network
-First of all create a network that will be used by docker projects.
+First create a network that will be used by docker projects.
 
 just type for example : 
 ``` sh
@@ -16,14 +16,14 @@ just type
 docker compose up -d
 ```
 
-then traefik web interface should be available at ``traefik.docker.localhost``
+then traefik web interface will be available at ``traefik.docker.localhost``
 
 ## 3 - Modify your docker compose file
-in your docker compose file :
+in your docker compose file:
 add these labels to exposed service (like caddy, apache, mailer ...)
-and the network : 
+and the network.
 
-Replace {SERVICE-NAME} {SERVICE-URL} and {INTERNAL_PORT_OF_SERVICE} with the correct values.
+**Replace {SERVICE-NAME} {SERVICE-URL} and {INTERNAL_PORT_OF_SERVICE} with the correct values.**
 
 ``` yaml
 services:
@@ -34,6 +34,7 @@ services:
             - traefik.http.routers.{SERVICE-NAME}.rule=Host(`{SERVICE-URL}.docker.localhost`)
             - traefik.http.services.{SERVICE-NAME}.loadbalancer.server.port={INTERNAL_PORT_OF_SERVICE}
         networks:
+            - default // you need to add this in order to keep the default network for your stack
             - traefik
 ```
 you can have a service being accessible by multiple name :
@@ -46,18 +47,20 @@ services:
             - traefik.http.routers.{SERVICE-NAME}.rule=Host(`{SERVICE-URL}.docker.localhost`, `{SERVICE-URL-2}.docker.localhost`)
             - traefik.http.services.{SERVICE-NAME}.loadbalancer.server.port={INTERNAL_PORT_OF_SERVICE}
         networks:
+            - default // you need to add this in order to keep the default network for your stack
             - traefik
 ```
 
 then and add the network you created in the docker compose file :
 ``` yaml
 networks:
+    default: // you need to add this in order to keep the default network for your stack
     traefik:
         external: true
 ```
 
 ## 4 - Update vhost in your projects
-Don't forget to update the vhost of your projects to use the {SERVICE-URL} you mentioned in your compose files.
+Remember to update the vhost of your projects to use the {SERVICE-URL} you mentioned in your compose files.
 
 ## 5 - Access your project
 Your project will be accessible via the {SERVICE-URL}.
@@ -81,4 +84,4 @@ http:
                 servers:
                     -   url: "http://localhost:81"  # Caddy écoute sur localhost:81
 ```
-and you need to update /etc/hosts as you would usualy do without traefik.
+and you need to update /etc/hosts as you would usually do without traefik.
