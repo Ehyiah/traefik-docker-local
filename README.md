@@ -44,7 +44,7 @@ services:
         image: my-server-image  
         labels:
             - traefik.enable=true
-            - traefik.http.routers.{SERVICE-NAME}.rule=Host(`{SERVICE-URL}.docker.localhost`, `{SERVICE-URL-2}.docker.localhost`)
+            - traefik.http.routers.{SERVICE-NAME}.rule=Host(`{SERVICE-URL}.docker.localhost`) || Host(`{SERVICE-URL-2}.docker.localhost`)
             - traefik.http.services.{SERVICE-NAME}.loadbalancer.server.port={INTERNAL_PORT_OF_SERVICE}
         networks:
             - default // you need to add this in order to keep the default network for your stack
