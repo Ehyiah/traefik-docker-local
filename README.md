@@ -69,6 +69,10 @@ Your project will be accessible via the {SERVICE-URL}
 
 
 ## 6. Optional Adding https:
+Create certificate
+- mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost" "domain.local" "*.domain.local"
+- _Reminder: X.509 wildcards only go one level deep, so this won't match a.b.docker.localhost_
+
 In your project update labels
 ``` yaml
     labels:
