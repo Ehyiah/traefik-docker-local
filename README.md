@@ -94,15 +94,15 @@ then in your traefik-dynamic.yml update :
 http:
     routers:
         test-router:
-            rule: Host(`other-service.localhost`)  # Définir la règle de routage pour l'adresse other-service.localhost
-            service: caddy-service  # Rediriger vers le service Caddy
+            rule: Host(`other-service.localhost`)  # Define the router rule "other-service.localhost", the service will be available at this address
+            service: caddy-service  # Redirect to the caddy-service
             entryPoints:
-                - web  # Traefik utilise l'entrée "web" qui écoute sur le port 80 (configuré dans traefik.yml)
+                - web  # will use the web entrypoint configured in traefik.yml.
 
     services:
         caddy-service:
             loadBalancer:
                 servers:
-                    -   url: "http://localhost:81"  # Caddy écoute sur localhost:81
+                    -   url: "http://localhost:81"  # Caddy listening on localhost:81
 ```
 and you need to update /etc/hosts as you would usually do without traefik.
