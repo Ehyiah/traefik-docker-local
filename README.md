@@ -1,27 +1,25 @@
 # traefik-docker-local
 Use traefik in local and automatic discovery for docker projects.
 
-# Classic Usage
+# Usage
 ## 1 - Create a network
-First create a network that will be used by docker projects.
+Create a network that will be used by docker projects.
 
-just type for example : 
 ``` sh
-docker network create traefik
+    docker network create traefik
 ```
 
 ## 2 - Start traefik
-just type 
 ``` sh
-docker compose up -d
+    docker compose up -d
 ```
 
 then traefik web interface will be available at ``traefik.docker.localhost``
 
-## 3 - Modify your docker compose file
-in your docker compose file:
-add these labels to exposed service (like caddy, apache, mailer ...)
-and the network.
+## 3 - Modify your projects docker compose file
+
+in your docker compose file: 2 steps are needed
+### 1. add these labels to exposed service (like caddy, apache, mailer ...)
 
 **Replace {SERVICE-NAME} {SERVICE-URL} and {INTERNAL_PORT_OF_SERVICE} with the correct values.**
 
@@ -37,6 +35,7 @@ services:
             - default // you need to add this in order to keep the default network for your stack
             - traefik
 ```
+
 you can have a service being accessible by multiple name :
 ``` yaml
 services:
@@ -51,6 +50,8 @@ services:
             - traefik
 ```
 
+### 2. and the networks.
+
 then and add the network you created in the docker compose file :
 ``` yaml
 networks:
@@ -59,11 +60,31 @@ networks:
         external: true
 ```
 
-## 4 - Update vhost in your projects
+## 4. Update vhost in your projects
 Remember to update the vhost of your projects to use the {SERVICE-URL} you mentioned in your compose files.
 
-## 5 - Access your project
-Your project will be accessible via the {SERVICE-URL}.
+## 5. Access your project
+Your project will be accessible via the {SERVICE-URL}
+
+
+
+## 6. Optional Adding https:
+Create certificate
+- mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "docker.localhost" "*.docker.localhost" "domain.local" "*.domain.local"
+- _Reminder: X.509 wildcards only go one level deep, so this won't match a.b.docker.localhost_
+
+In your project update labels
+``` yaml
+    labels:
+      - traefik.enable=true // should already be existing il you followed previous steps
+      - traefik.http.routers.{SERVICE-NAME}.rule=Host(`project.docker.localhost`) // should already be existing il you followed previous steps
+      - traefik.http.services.{SERVICE-NAME}.loadbalancer.server.port=80 // should already be existing il you followed previous steps
+      // TLS related lines
+      - traefik.http.routers.{SERVICE-NAME}-tls.rule=Host(`project.docker.localhost`) // add these lines on services you want to be https exposed
+      - traefik.http.routers.{SERVICE-NAME}-tls.tls=true // add these lines on services you want to be https exposed
+      - traefik.http.routers.{SERVICE-NAME}-tls.entrypoints=webSecure // add these lines on services you want to be https exposed
+```
+
 
 
 # Serve other web server (e.g caddy, apache, nginx)

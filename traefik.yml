@@ -4,10 +4,19 @@ global:
 entryPoints:
     web:
         address: :80
+        # enable auto redirection to https with lines below
+#        http:
+#            redirections:
+#                entryPoint:
+#                    to: webSecure
+#                    scheme: https
+#                    permanent: false
+    webSecure:
+        address: :443
 
 providers:
     docker:
-        exposedByDefault: false
+        exposedByDefault: false # must add traefik.enable=true in container label if this is at false
         defaultRule: "Host(`{{ normalize .Name }}.docker.localhost`)"
         network: traefik
     file:
